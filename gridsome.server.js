@@ -1,11 +1,11 @@
 const nodeExternals = require("webpack-node-externals");
 
-module.exports = function (api) {
+module.exports = function(api) {
   api.chainWebpack((config, { isServer }) => {
     if (isServer) {
       config.externals([
         nodeExternals({
-          allowlist: [/^vuetify/],
+          allowlist: [/^vuetify/, /\.css$/, /\?vue&type=style/],
         }),
       ]);
     }
@@ -21,7 +21,6 @@ module.exports = function (api) {
         }
       }
     `);
-    console.log(data);
     data.strapi.galleries.forEach((gallery) => {
       createPage({
         path: "/galleries/" + gallery.slug,

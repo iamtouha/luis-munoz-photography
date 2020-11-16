@@ -9,7 +9,7 @@
           {{ gallery.description_en }}
         </v-card-text>
       </v-card>
-      <v-row class="ma-0">
+      <!-- <v-row class="ma-0">
         <v-col class="pa-0" v-for="(col, i) in photoColumns" :key="i + 'a'">
           <v-row class="pa-1 ma-0" v-for="photo in col" :key="photo.url">
             <g-image
@@ -18,7 +18,7 @@
             ></g-image>
           </v-row>
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-container>
   </Layout>
 </template>
@@ -41,8 +41,6 @@ query($slug:String!){
 }
 </page-query>
 <script>
-import chunk from "lodash.chunk";
-
 export default {
   name: "Gallery",
   metaInfo() {
