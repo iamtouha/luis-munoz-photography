@@ -7,7 +7,16 @@
 module.exports = {
   siteName: "Luis Munoz Photography",
   siteDescription: "A photography blog",
+
   plugins: [
+    {
+      use: "@gridsome/source-graphql",
+      options: {
+        url: process.env.STRAPI_URL || "http://localhost:1337/graphql",
+        fieldName: "strapi",
+        typeName: "strapiTypes",
+      },
+    },
     // {
     //   use: "gridsome-plugin-i18n",
     //   options: {

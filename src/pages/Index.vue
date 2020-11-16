@@ -1,33 +1,64 @@
 <template>
   <Layout>
-
-    <!-- Learn how to use images here: https://gridsome.org/docs/images -->
-    <g-image alt="Example image" src="~/favicon.png" width="135" />
-
-    <h1>Hello, world!</h1>
-
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur excepturi labore tempore expedita, et iste tenetur suscipit explicabo! Dolores, aperiam non officia eos quod asperiores
-    </p>
-
-    <p class="home-links">
-      <a href="https://gridsome.org/docs/" target="_blank" rel="noopener">Gridsome Docs</a>
-      <a href="https://github.com/gridsome/gridsome" target="_blank" rel="noopener">GitHub</a>
-    </p>
-
+    <v-container>
+      <transition-group class="row" name="fade">
+        <v-col
+          v-show="loaded"
+          v-for="gallery in $page.strapi.galleries"
+          :key="gallery.id"
+          cols="12"
+          md="6"
+        >
+          <v-card flat tile :to="'/galleries/' + gallery.slug">
+            <v-img
+              :lazy-src="baseUrl + gallery.photos[0].url"
+              style="max-width:100%"
+              :src="baseUrl + gallery.photos[0].url"
+            />
+          </v-card>
+        </v-col>
+      </transition-group>
+    </v-container>
   </Layout>
 </template>
-
-<script>
-export default {
-  metaInfo: {
-    title: 'Hello, world!'
+<page-query>
+{
+  strapi {
+    galleries{
+      id
+      slug
+      title_en
+      title_esp
+      photos{
+        url
+      }
+    }
   }
 }
-</script>
+</page-query>
+<script>
+export default {
+  name: "Home",
+  metaInfo: {
+    title: "Welcome!",
+  },
+  data: () => ({
+    // galleries: [],
+    loaded: false,
+  }),
+  mounted() {
+    this.loaded = true;
+  },
+  computed: {
+    galleries() {
+      return [];
+      // return this.$page.allStrapiGallery.edges.map(({ node }) => node);
+    },
+    baseUrl() {
+      return process.env.BASE_URL || "http://localhost:1337";
+    },
+  },
 
-<style>
-.home-links a {
-  margin-right: 1rem;
-}
-</style>
+  methods: {},
+};
+</script>

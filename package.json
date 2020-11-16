@@ -7,9 +7,11 @@
     "explore": "gridsome explore"
   },
   "dependencies": {
+    "@gridsome/source-graphql": "^0.1.0",
     "@gridsome/source-strapi": "^0.2.0",
     "gridsome": "^0.7.0",
     "gridsome-plugin-i18n": "^1.6.0",
+    "lodash.chunk": "^4.2.0",
     "vuetify": "^2.3.17"
   },
   "devDependencies": {

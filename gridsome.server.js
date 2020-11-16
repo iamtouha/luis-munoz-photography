@@ -1,6 +1,6 @@
 const nodeExternals = require("webpack-node-externals");
 
-module.exports = function(api) {
+module.exports = function (api) {
   api.chainWebpack((config, { isServer }) => {
     if (isServer) {
       config.externals([
@@ -11,7 +11,25 @@ module.exports = function(api) {
     }
   });
 
-  api.loadSource((store) => {
-    // Use the Data store API here: https://gridsome.org/docs/data-store-api
+  api.createPages(async ({ graphql, createPage }) => {
+    const { data } = await graphql(`
+      {
+        strapi {
+          galleries {
+            slug
+          }
+        }
+      }
+    `);
+    console.log(data);
+    data.strapi.galleries.forEach((gallery) => {
+      createPage({
+        path: "/galleries/" + gallery.slug,
+        component: "./src/templates/Gallery.vue",
+        context: {
+          slug: gallery.slug,
+        },
+      });
+    });
   });
 };
