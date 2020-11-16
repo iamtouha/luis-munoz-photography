@@ -17,6 +17,13 @@
             />
           </v-card>
         </v-col>
+        <v-col
+          v-if="!$page.strapi.galleries.length"
+          cols="12"
+          class="text-center"
+        >
+          No galleries found
+        </v-col>
       </transition-group>
     </v-container>
   </Layout>
