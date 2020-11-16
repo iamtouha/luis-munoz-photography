@@ -21,6 +21,7 @@ module.exports = function(api) {
         }
       }
     `);
+    console.log(data);
     data.strapi.galleries.forEach((gallery) => {
       createPage({
         path: "/galleries/" + gallery.slug,
