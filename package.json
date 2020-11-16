@@ -1,18 +1,20 @@
 {
   "name": "luis-munoz-photography",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "gridsome build",
-    "develop": "gridsome develop",
-    "explore": "gridsome explore"
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
   },
   "dependencies": {
-    "@gridsome/source-graphql": "^0.1.0",
-    "gridsome": "^0.7.0",
-    "gridsome-plugin-i18n": "^1.6.0",
-    "vuetify": "^2.3.17"
+    "@nuxtjs/apollo": "^4.0.1-rc.5",
+    "core-js": "^3.6.5",
+    "graphql-tag": "^2.11.0",
+    "nuxt": "^2.14.6"
   },
   "devDependencies": {
-    "webpack-node-externals": "^2.5.2"
+    "@nuxtjs/vuetify": "^1.11.2"
   }
 }
