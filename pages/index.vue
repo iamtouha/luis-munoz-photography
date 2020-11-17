@@ -1,7 +1,13 @@
 <template>
   <v-container>
     <transition-group class="row" name="scroll-y-reverse-transition">
-      <v-col v-for="gallery in galleries" :key="gallery.slug" cols="12" md="6">
+      <v-col
+        v-show="loaded"
+        v-for="gallery in galleries"
+        :key="gallery.slug"
+        cols="12"
+        md="6"
+      >
         <gallery-preview-card :gallery="gallery" />
       </v-col>
     </transition-group>
@@ -42,7 +48,10 @@ export default {
   },
   data: () => ({
     galleries: [],
-    hover: false
-  })
+    loaded: false
+  }),
+  mounted() {
+    this.loaded = true;
+  }
 };
 </script>

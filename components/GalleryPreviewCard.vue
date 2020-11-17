@@ -7,11 +7,15 @@
     @mouseenter="hover = true"
     @mouseleave="hover = false"
   >
-    <v-img
-      height="500px"
-      :lazy-src="baseUrl + gallery.photos[0].formats.thumbnail.url"
-      :src="baseUrl + gallery.photos[0].url"
-    ></v-img>
+    <transition name="fade">
+      <v-img
+        height="500px"
+        aspect-ratio="1"
+        :lazy-src="baseUrl + gallery.photos[0].formats.thumbnail.url"
+        :src="baseUrl + photoUrl"
+      ></v-img>
+    </transition>
+
     <v-card-title>
       {{ gallery.title_en }}
     </v-card-title>
@@ -29,15 +33,20 @@ export default {
       hover: false
     };
   },
-   computed: {
+  computed: {
     baseUrl() {
       return process.env.BASE_URL;
+    },
+    photoUrl() {
+      const mobile = this.$vuetify.breakpoint.smAndDown;
+      if (mobile) return this.gallery.photos[0].formats.small.url;
+      return this.gallery.photos[0].formats.medium.url;
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss">
 .galleries-deck {
   transition-duration: 0.5s;
 }
