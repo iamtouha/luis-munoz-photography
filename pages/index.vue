@@ -1,16 +1,16 @@
 <template>
   <v-container>
-    <transition-group class="row" name="scroll-y-reverse-transition">
-      <v-col
-        v-show="loaded"
-        v-for="gallery in galleries"
-        :key="gallery.slug"
-        cols="12"
-        md="6"
-      >
-        <gallery-preview-card :gallery="gallery" />
-      </v-col>
-    </transition-group>
+    <v-col
+      style="min-height:400px;"
+      v-for="gallery in galleries"
+      :key="gallery.slug"
+      cols="12"
+      md="6"
+    >
+      <transition name="scroll-y-reverse-transition">
+        <gallery-preview-card v-show="loaded" :gallery="gallery" />
+      </transition>
+    </v-col>
   </v-container>
 </template>
 

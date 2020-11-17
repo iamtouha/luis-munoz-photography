@@ -18,8 +18,9 @@
         :key="i + 'a'"
       >
         <v-row class="pa-1 ma-0" v-for="photo in col" :key="photo.url">
-          <transition name="scroll-y-transition">
+          <transition name="scroll-y-reverse-transition">
             <v-img
+              v-show="loaded"
               :src="baseUrl + photo.url"
               :lazy-src="baseUrl + photo.formats.thumbnail.url"
               style="max-width:100%;"
@@ -70,7 +71,8 @@ export default {
   data: () => ({
     gallery: {
       photos: []
-    }
+    },
+    loaded: false
   }),
   computed: {
     photoColumns() {
@@ -121,6 +123,11 @@ export default {
     baseUrl() {
       return process.env.BASE_URL;
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loaded = true;
+    }, 100);
   }
 };
 </script>
