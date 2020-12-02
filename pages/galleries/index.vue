@@ -26,11 +26,11 @@ const query = gql`
 `;
 export default {
   name: "Galleries",
-  async asyncData({ app, params }) {
+  async asyncData({ app }) {
     const provider = app.apolloProvider.defaultClient;
     const resp = await provider.query({ query }).catch(console.log);
     return {
-      galleries: resp.data.galleries
+      galleries: resp.data.galleries || []
     };
   },
   data: () => ({
