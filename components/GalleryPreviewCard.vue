@@ -11,8 +11,8 @@
       <v-img
         height="500px"
         aspect-ratio="1"
-        :lazy-src="baseUrl + gallery.photos[0].formats.thumbnail.url"
-        :src="baseUrl + photoUrl"
+        :lazy-src="gallery.photos[0].image.url"
+        :src="gallery.photos[0].image.url"
       ></v-img>
     </transition>
 
@@ -36,12 +36,12 @@ export default {
   computed: {
     baseUrl() {
       return process.env.BASE_URL;
-    },
-    photoUrl() {
-      const mobile = this.$vuetify.breakpoint.smAndDown;
-      if (mobile) return this.gallery.photos[0].formats.small.url;
-      return this.gallery.photos[0].formats.medium.url;
     }
+    // photoUrl() {
+    //   const mobile = this.$vuetify.breakpoint.smAndDown;
+    //   if (mobile) return this.gallery.photos[0].formats.small.url;
+    //   return this.gallery.photos[0].formats.medium.url;
+    // }
   }
 };
 </script>
