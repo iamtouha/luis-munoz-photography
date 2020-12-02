@@ -124,13 +124,11 @@ export default {
     const resp = await provider
       .query({
         query,
-
         variables: {
           slug: params.slug
         }
       })
       .catch(console.log);
-    console.log(resp);
     return {
       gallery: resp.data.galleries[0]
     };
