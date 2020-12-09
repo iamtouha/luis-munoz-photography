@@ -5,7 +5,6 @@
         <span class="gallery-title">
           {{ gallery.title_en }}
         </span>
-
         <v-spacer />
         <v-text-field
           v-model="text"
@@ -33,7 +32,94 @@
         {{ gallery.description_en }}
       </v-card-text>
     </v-card>
+    <v-toolbar class="gallery-toolbar" dense elevation="0">
+      <v-menu v-model="dropdown" offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" text>
+            <img
+              class="mr-2"
+              :src="
+                dropdown ? '/icons/folder-open.svg' : '/icons/folder-closed.svg'
+              "
+            />234/250
+          </v-btn>
+        </template>
+        <v-list min-width="250px">
+          <v-list-item>
+            <v-list-item-action class="mr-2">
+              <v-checkbox></v-checkbox>
+            </v-list-item-action>
+            <v-list-item-title class="body-2 dd-list-item">
+              <span class="text">
+                Folder 1
+              </span>
+              <span class="line"></span>
+            </v-list-item-title>
+            <v-list-item-action class="ml-2">
+              2
+            </v-list-item-action>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-action class="mr-2">
+              <v-checkbox></v-checkbox>
+            </v-list-item-action>
+            <v-list-item-title class="body-2 dd-list-item">
+              <span class="text">
+                Folder 1
+              </span>
+              <span class="line"></span>
+            </v-list-item-title>
+            <v-list-item-action class="ml-2">
+              2
+            </v-list-item-action>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-action class="mr-2">
+              <v-checkbox></v-checkbox>
+            </v-list-item-action>
+            <v-list-item-title class="body-2 dd-list-item">
+              <span class="text">
+                Folder 1
+              </span>
+              <span class="line"></span>
+            </v-list-item-title>
+            <v-list-item-action class="ml-2">
+              2
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-btn disabled icon>
+        <v-icon>mdi-format-list-bulleted</v-icon>
+      </v-btn>
 
+      <v-spacer />
+      <v-btn class="mx-2" icon>
+        <img width="28px" src="/icons/add_to_downloads.svg" />
+      </v-btn>
+      <v-btn
+        class="mx-2 ody-1 font-weight-bold"
+        shaped
+        elevation="0"
+        small
+        color="info"
+      >
+        10
+      </v-btn>
+      <v-btn class="mx-2" icon>
+        <img width="22px" src="/icons/share.svg" />
+      </v-btn>
+      <v-btn :disabled="!gallery.allowDownload" class="mx-2" icon>
+        <img
+          width="28px"
+          :src="
+            gallery.allowDownload
+              ? '/icons/download-cloud.svg'
+              : '/icons/download-cloud-disabled.svg'
+          "
+        />
+      </v-btn>
+    </v-toolbar>
     <v-row v-if="photoColumns.length" class="ma-0">
       <v-col
         class="pa-0"
@@ -55,7 +141,6 @@
     </v-row>
     <v-row v-for="folder in folderPhotoColumns" :key="folder.name" class="ma-0">
       <v-col cols="12">
-        <v-divider class="my-10" />
         <p class="gallery-title">
           {{ folder.name }}
         </p>
@@ -71,7 +156,7 @@
             <v-img
               v-show="loaded"
               :src="photo.grid_url"
-              :lazy-src="photo.formats.thumbnail.url"
+              :lazy-src="photo.grid_url"
               style="max-width:100%;"
             ></v-img>
           </transition>
@@ -91,6 +176,7 @@ const query = gql`
       title_esp
       description_en
       description_esp
+      allowDownload
       files {
         photo {
           width
@@ -137,6 +223,7 @@ export default {
     gallery: {
       photos: []
     },
+    dropdown: false,
     loaded: false,
     text: "",
     radio: true
@@ -154,15 +241,17 @@ export default {
           columns: this.getPhotoColumns(folder.files)
         };
       });
-    },
-    baseUrl() {
-      return process.env.BASE_URL;
     }
   },
   mounted() {
     setTimeout(() => {
       this.loaded = true;
     }, 100);
+  },
+  head() {
+    return {
+      title: this.gallery.title_en
+    };
   },
   methods: {
     getPhotoColumns(files) {
@@ -173,7 +262,7 @@ export default {
           const { formats, width, height } = file.photo;
           return {
             formats,
-            grid_url: formats.medium.url,
+            grid_url: formats.small.url,
             width,
             height
           };
@@ -211,15 +300,37 @@ export default {
   }
 };
 </script>
-<style>
+<style lang="scss">
 .gallery-title {
   font-size: 16px;
   font-weight: 700;
+  margin-bottom: 0 !important;
 }
 .gallery-search .v-input__slot::before {
   display: none;
 }
 .gallery-switch .v-input--switch__thumb {
   background: white !important;
+}
+.gallery-toolbar {
+  .v-toolbar__content {
+    padding: 0 !important;
+  }
+}
+.dd-list-item {
+  display: flex;
+  align-items: flex-end;
+  span {
+    display: block;
+  }
+  span.text {
+    flex-shrink: 1;
+  }
+  span.line {
+    flex-grow: 1;
+    height: 2px;
+    margin-left: 10px;
+    border-bottom: 1px dashed #ccc;
+  }
 }
 </style>

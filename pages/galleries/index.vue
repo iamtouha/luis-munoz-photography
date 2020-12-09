@@ -30,7 +30,7 @@ export default {
     const provider = app.apolloProvider.defaultClient;
     const resp = await provider.query({ query }).catch(console.log);
     return {
-      galleries: resp.data.galleries || []
+      galleries: resp.data.galleries
     };
   },
   data: () => ({
