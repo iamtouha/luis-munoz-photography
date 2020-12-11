@@ -132,7 +132,7 @@
             <v-img
               v-show="loaded"
               :src="photo.grid_url"
-              :lazy-src="photo.formats.thumbnail.url"
+              :lazy-src="photo.grid_url"
               style="max-width:100%;"
             ></v-img>
           </transition>
@@ -178,26 +178,21 @@ const query = gql`
       description_esp
       allowDownload
       files {
-        photo {
-          width
-          height
-          formats
-        }
-        tags
-        caption_en
-        caption_esp
+        url
+        formats
+        width
+        height
+        alternativeText
+        caption
       }
       folders {
         name
         files {
-          photo {
-            width
-            height
-            formats
-          }
-          tags
-          caption_en
-          caption_esp
+          formats
+          width
+          height
+          alternativeText
+          caption
         }
       }
     }
@@ -259,7 +254,7 @@ export default {
       let photos = [];
       if (mobile) {
         photos = files.map(file => {
-          const { formats, width, height } = file.photo;
+          const { formats, width, height } = file;
           return {
             formats,
             grid_url: formats.small.url,
@@ -270,7 +265,7 @@ export default {
         return [photos];
       }
       photos = files.map(file => {
-        const { formats, width, height } = file.photo;
+        const { formats, width, height } = file;
         return {
           formats,
           grid_url: formats.large.url,
