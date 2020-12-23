@@ -1,50 +1,53 @@
 <template>
-  <v-app>
-    <v-app-bar app light flat hide-on-scroll color="white">
-      <v-toolbar-title>
-        <Logo />
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-toolbar-items>
-        <v-btn
-          text
-          class="text-none"
+  <div class="wrapper">
+    <nav class="navbar">
+      <logo />
+      <div>
+        <nuxt-link
           v-for="{ name, path } in routes"
           :key="name"
+          tag="a"
           :to="path"
         >
           {{ name }}
-        </v-btn>
-        <v-btn text class="text-none">
-          EN
-        </v-btn>
-      </v-toolbar-items>
-    </v-app-bar>
-    <v-main>
-      <nuxt />
-    </v-main>
-  </v-app>
+        </nuxt-link>
+        <a>EN</a>
+      </div>
+    </nav>
+    <Nuxt />
+  </div>
 </template>
-
 <script>
 export default {
-  name: "DefautLayout",
+  name: "DefaultLayout",
   data: () => ({
     routes: [
-      {
-        name: "Architecture",
-        path: "/"
-      },
-      {
-        name: "Editorial",
-        path: "/"
-      },
-      {
-        name: "Product",
-        path: "/"
-      }
+      { name: "Architecture", path: "/architecture" },
+      { name: "Editorial", path: "/editorial" },
+      { name: "Product", path: "/product" },
+      { name: "About Me", path: "/aboutme" }
     ]
   })
 };
 </script>
 
+<style lang="sass">
+html, *
+  margin:0
+  padding: 0
+  font-family:"Inter",sans-serif
+
+.wrapper
+  @apply p-0 m-0
+  .navbar
+    @apply py-5 fixed w-full lg:px-12 flex
+    div
+      @apply hidden sm:block
+      a
+        @apply px-2.5
+        &:last-child
+          @apply pr-0
+
+.page-wrapper
+  @apply lg:px-12 pt-20
+</style>

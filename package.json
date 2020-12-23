@@ -11,11 +11,17 @@
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.1-rc.5",
     "core-js": "^3.6.5",
-    "graphql-tag": "^2.11.0",
     "nuxt": "^2.14.6",
-    "nuxt-webfontloader": "^1.1.0"
+    "nuxt-webfontloader": "^1.1.0",
+    "v-click-outside": "^3.1.2"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.11.2"
+    "@nuxtjs/tailwindcss": "^3.4.2",
+    "@tailwindcss/postcss7-compat": "^2.0.2",
+    "autoprefixer": "^9",
+    "postcss": "^7",
+    "sass": "^1.30.0",
+    "sass-loader": "^10.1.0",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   }
 }

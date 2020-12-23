@@ -1,15 +1,17 @@
 <template>
-  <v-container>
-    <v-list>
-      <v-list-item
-        v-for="gallery in galleries"
-        :key="gallery.id"
-        :to="'/galleries/' + gallery.slug"
+  <div class="page-wrapper">
+    <ul>
+      <nuxt-link
+        tag="li"
+        class="cursor-pointer"
+        :to="'/galleries/' + item.slug"
+        v-for="item in galleries"
+        :key="item.id"
       >
-        <v-list-item-title>{{ gallery.title_en }}</v-list-item-title>
-      </v-list-item>
-    </v-list>
-  </v-container>
+        {{ item.title_en }}
+      </nuxt-link>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -38,5 +40,3 @@ export default {
   })
 };
 </script>
-
-<style></style>

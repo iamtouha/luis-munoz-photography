@@ -1,203 +1,91 @@
 <template>
-  <v-container class="pb-10">
-    <v-card flat>
-      <v-card-title class="pb-0 px-0">
-        <span class="gallery-title">
-          {{ gallery.title_en }}
+  <div class="page-wrapper">
+    <div class="flex">
+      <h4 class="gallery-title">{{ gallery.title_en }}</h4>
+      <input type="text" ref="searchBox" class="search-box" v-model="search" />
+      <img
+        class="search-icon"
+        src="/icons/loupe-search.svg"
+        alt="search"
+        @click="focusOnSearch"
+      />
+      <toggle-btn v-model="toggle" />
+    </div>
+    <hr class="mb-3 mt-1" />
+    <p class="text-sm">
+      {{ gallery.description_en }}
+    </p>
+    <div class="flex py-2 mt-2 relative">
+      <button
+        class="folderview-button folder-click"
+        @click="folderDropdown = !folderDropdown"
+      >
+        <img
+          class="mr-2 folder-click"
+          :src="
+            folderDropdown
+              ? '/icons/folder-open.svg'
+              : '/icons/folder-closed.svg'
+          "
+          alt="Folder"
+        />
+        <span class="text-sm folder-click">
+          230/10
         </span>
-        <v-spacer />
-        <v-text-field
-          v-model="text"
-          style="max-width:250px;"
-          class="gallery-search"
-          dense
-          color="black"
-          hide-details
+      </button>
+      <transition name="slide" style="display:contents;">
+        <ul
+          v-show="folderDropdown"
+          v-click-outside="folderDdownConfig"
+          class="folder-dropdown"
         >
-          <template v-slot:append>
-            <v-icon>mdi-magnify</v-icon>
-          </template>
-        </v-text-field>
-        <v-switch
-          v-model="radio"
-          class="gallery-switch mt-0 mb-1 ml-2"
-          dense
-          color="black"
-          hide-details
-          inset
-        ></v-switch>
-      </v-card-title>
-      <v-divider />
-      <v-card-text class="black--text px-0">
-        {{ gallery.description_en }}
-      </v-card-text>
-    </v-card>
-    <v-toolbar class="gallery-toolbar" dense elevation="0">
-      <v-menu v-model="dropdown" offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn v-on="on" text>
-            <img
-              class="mr-2"
-              :src="
-                dropdown ? '/icons/folder-open.svg' : '/icons/folder-closed.svg'
-              "
-            />234/250
-          </v-btn>
-        </template>
-        <v-list min-width="250px">
-          <v-list-item>
-            <v-list-item-action class="mr-2">
-              <v-checkbox></v-checkbox>
-            </v-list-item-action>
-            <v-list-item-title class="body-2 dd-list-item">
-              <span class="text">
-                Folder 1
-              </span>
-              <span class="line"></span>
-            </v-list-item-title>
-            <v-list-item-action class="ml-2">
-              2
-            </v-list-item-action>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-action class="mr-2">
-              <v-checkbox></v-checkbox>
-            </v-list-item-action>
-            <v-list-item-title class="body-2 dd-list-item">
-              <span class="text">
-                Folder 1
-              </span>
-              <span class="line"></span>
-            </v-list-item-title>
-            <v-list-item-action class="ml-2">
-              2
-            </v-list-item-action>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-action class="mr-2">
-              <v-checkbox></v-checkbox>
-            </v-list-item-action>
-            <v-list-item-title class="body-2 dd-list-item">
-              <span class="text">
-                Folder 1
-              </span>
-              <span class="line"></span>
-            </v-list-item-title>
-            <v-list-item-action class="ml-2">
-              2
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-      <v-btn disabled icon>
-        <v-icon>mdi-format-list-bulleted</v-icon>
-      </v-btn>
+          <li>
+            <button class="focus:outline-none mr-2">
+              <img class="w-3.5 h-3.5" src="/icons/check-all-blank.svg" />
+            </button>
+            folder-1
+            <span class="flex-grow mt-3 mb-1.5 mx-1"></span>
+            <span class="text-sm">
+              3
+            </span>
+          </li>
+        </ul>
+      </transition>
+      <img
+        class="ml-4 px-2 cursor-pointer mr-auto"
+        src="/icons/details-view.svg"
+      />
 
-      <v-spacer />
-      <v-btn class="mx-2" icon>
-        <img width="28px" src="/icons/add_to_downloads.svg" />
-      </v-btn>
-      <v-btn
-        class="mx-2 ody-1 font-weight-bold"
-        shaped
-        elevation="0"
-        small
-        color="info"
+      <button class="focus:outline-none mr-1 px-2 ml-auto">
+        <img src="/icons/add_to_downloads.svg" />
+      </button>
+      <button
+        class="focus:outline-none mx-1 px-2 bg-blue-300 text-white rounded text-sm"
       >
         10
-      </v-btn>
-      <v-btn class="mx-2" icon>
-        <img width="22px" src="/icons/share.svg" />
-      </v-btn>
-      <v-btn :disabled="!gallery.allowDownload" class="mx-2" icon>
+      </button>
+      <button class="focus:outline-none mx-1 px-2">
+        <img src="/icons/share.svg" />
+      </button>
+      <button
+        :disabled="!gallery.allowDownload"
+        class="focus:outline-none ml-1 pl-1"
+      >
         <img
-          width="28px"
           :src="
             gallery.allowDownload
               ? '/icons/download-cloud.svg'
               : '/icons/download-cloud-disabled.svg'
           "
         />
-      </v-btn>
-    </v-toolbar>
-    <v-row v-if="photoColumns.length" class="ma-0">
-      <v-col
-        class="pa-0"
-        v-for="(col, i) in photoColumns"
-        :cols="photoColumns.length > 1 ? '6' : '12'"
-        :key="i + 'a'"
-      >
-        <v-row class="pa-1 ma-0" v-for="photo in col" :key="photo.grid_url">
-          <transition name="scroll-y-reverse-transition">
-            <v-img
-              v-show="loaded"
-              :src="photo.grid_url"
-              :lazy-src="photo.grid_url"
-              style="max-width:100%;"
-            ></v-img>
-          </transition>
-        </v-row>
-      </v-col>
-    </v-row>
-    <v-row v-for="folder in folderPhotoColumns" :key="folder.name" class="ma-0">
-      <v-col cols="12">
-        <p class="gallery-title">
-          {{ folder.name }}
-        </p>
-      </v-col>
-      <v-col
-        class="pa-0"
-        v-for="(col, i) in folder.columns"
-        :cols="folder.columns.length > 1 ? '6' : '12'"
-        :key="i + 'b'"
-      >
-        <v-row class="pa-1 ma-0" v-for="photo in col" :key="photo.grid_url">
-          <transition name="scroll-y-reverse-transition">
-            <v-img
-              v-show="loaded"
-              :src="photo.grid_url"
-              :lazy-src="photo.grid_url"
-              style="max-width:100%;"
-            ></v-img>
-          </transition>
-        </v-row>
-      </v-col>
-    </v-row>
-  </v-container>
+      </button>
+    </div>
+  </div>
 </template>
 
 <script>
-import gql from "graphql-tag";
-const query = gql`
-  query($slug: String!) {
-    galleries(where: { slug: $slug }) {
-      id
-      title_en
-      title_esp
-      description_en
-      description_esp
-      allowDownload
-      files {
-        url
-        formats
-        width
-        height
-        alternativeText
-        caption
-      }
-      folders {
-        name
-        files {
-          formats
-          width
-          height
-          alternativeText
-          caption
-        }
-      }
-    }
-  }
-`;
+import query from "~/assets/queries/gallery.gql";
+
 export default {
   name: "Gallery",
   async asyncData({ app, params }) {
@@ -214,15 +102,25 @@ export default {
       gallery: resp.data.galleries[0]
     };
   },
-  data: () => ({
-    gallery: {
-      photos: []
-    },
-    dropdown: false,
-    loaded: false,
-    text: "",
-    radio: true
-  }),
+  data() {
+    return {
+      gallery: {
+        photos: []
+      },
+      folderDdownConfig: {
+        handler: this.hideFolderDropdown,
+        middleware: ({ target }) =>
+          !target.className.split(" ").includes("folder-click"),
+        events: ["click"],
+        isActive: true
+      },
+      toggle: false,
+      folderDropdown: false,
+      loaded: false,
+      search: "",
+      radio: true
+    };
+  },
   computed: {
     photoColumns() {
       if (!this.gallery.files.length) return [];
@@ -249,8 +147,14 @@ export default {
     };
   },
   methods: {
+    focusOnSearch() {
+      this.$refs.searchBox?.focus();
+    },
+    hideFolderDropdown() {
+      this.folderDropdown = false;
+    },
     getPhotoColumns(files) {
-      const mobile = this.$vuetify.breakpoint.smAndDown;
+      const mobile = document?.documentElement.clientWidth;
       let photos = [];
       if (mobile) {
         photos = files.map(file => {
@@ -295,37 +199,35 @@ export default {
   }
 };
 </script>
-<style lang="scss">
-.gallery-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 0 !important;
-}
-.gallery-search .v-input__slot::before {
-  display: none;
-}
-.gallery-switch .v-input--switch__thumb {
-  background: white !important;
-}
-.gallery-toolbar {
-  .v-toolbar__content {
-    padding: 0 !important;
-  }
-}
-.dd-list-item {
-  display: flex;
-  align-items: flex-end;
-  span {
-    display: block;
-  }
-  span.text {
-    flex-shrink: 1;
-  }
-  span.line {
-    flex-grow: 1;
-    height: 2px;
-    margin-left: 10px;
-    border-bottom: 1px dashed #ccc;
-  }
-}
+<style lang="sass">
+.gallery-title
+  @apply text-base font-bold mr-auto ml-0
+
+.search-icon
+  @apply cursor-pointer mr-3
+
+.search-box
+  @apply mr-0 ml-auto outline-none
+  transition: border .3s ease-in-out
+  border-bottom: 1px solid rgba(#000, 0)
+  &:focus
+    border-bottom: 1px solid #3e3e3e
+
+.folderview-button
+  @apply focus:outline-none flex
+.folder-dropdown
+  @apply absolute top-8 shadow-md p-4
+  min-width:250px
+  li
+    @apply p-2 flex
+    span.flex-grow
+      border-bottom: 1px dashed #aaa
+
+.slide-leave-active,
+.slide-enter-active
+  transition: .3s
+.slide-enter,
+.slide-leave-to
+  transform: translateY(30px)
+  opacity:0
 </style>

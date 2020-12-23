@@ -1,0 +1,28 @@
+query($slug: String!) {
+  galleries(where: { slug: $slug }) {
+    id
+    title_en
+    title_esp
+    description_en
+    description_esp
+    allowDownload
+    files {
+      url
+      formats
+      width
+      height
+      alternativeText
+      caption
+    }
+    folders {
+      name
+      files {
+        formats
+        width
+        height
+        alternativeText
+        caption
+      }
+    }
+  }
+}

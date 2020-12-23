@@ -2,6 +2,7 @@
   <svg
     width="272"
     height="17"
+    class="NuxtLogo flex-shrink ml-0 mr-auto"
     viewBox="0 0 272 17"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -12,3 +13,15 @@
     />
   </svg>
 </template>
+
+<style>
+.NuxtLogo {
+  animation: 1s appear;
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+}
+</style>
