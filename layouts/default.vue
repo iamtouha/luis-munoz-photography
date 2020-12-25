@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <nav class="navbar">
+    <nav class="navbar bg-white z-50">
       <logo />
       <div>
         <nuxt-link
@@ -27,7 +27,12 @@ export default {
       { name: "Product", path: "/product" },
       { name: "About Me", path: "/aboutme" }
     ]
-  })
+  }),
+  computed: {
+    scrollTop() {
+      return document?.documentElement.scrollTop;
+    }
+  }
 };
 </script>
 

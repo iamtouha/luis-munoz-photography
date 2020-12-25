@@ -37,7 +37,7 @@
         <ul
           v-show="folderDropdown"
           v-click-outside="folderDdownConfig"
-          class="folder-dropdown"
+          class="folder-dropdown z-10 bg-white"
         >
           <li>
             <button class="focus:outline-none mr-2">
@@ -80,6 +80,34 @@
         />
       </button>
     </div>
+    <client-only>
+      <div v-show="photoColumns.length" class="flex flex-row space-x-3">
+        <transition-group
+          appear
+          name="slide"
+          v-for="(col, i) in photoColumns"
+          :key="i"
+          tag="div"
+          style="flex-basis:0"
+          class="flex flex-col flex-grow space-y-3"
+        >
+          <div v-for="img in col" :key="img.grid_url" class="relative">
+            <img class="w-full min-h-15" :src="img.grid_url" />
+            <div
+              style="background: rgba(0,0,0,0.4)"
+              class="absolute bottom-0 flex justify-between left-0 w-full h-8 text-white px-2"
+            >
+              <span class="text-xs py-2">
+                {{ img.caption }}
+              </span>
+              <button class="focus:outline-none">
+                <img src="/icons/plus-on-picures.svg" alt="Plus" />
+              </button>
+            </div>
+          </div>
+        </transition-group>
+      </div>
+    </client-only>
   </div>
 </template>
 
@@ -105,7 +133,8 @@ export default {
   data() {
     return {
       gallery: {
-        photos: []
+        photos: [],
+        files: []
       },
       folderDdownConfig: {
         handler: this.hideFolderDropdown,
@@ -154,26 +183,28 @@ export default {
       this.folderDropdown = false;
     },
     getPhotoColumns(files) {
-      const mobile = document?.documentElement.clientWidth;
+      const mobile = process.client && document?.documentElement.clientWidth;
       let photos = [];
-      if (mobile) {
+      if (mobile <= 800) {
         photos = files.map(file => {
-          const { formats, width, height } = file;
+          const { formats, width, height, caption } = file;
           return {
             formats,
             grid_url: formats.small.url,
             width,
-            height
+            height,
+            caption
           };
         });
         return [photos];
       }
       photos = files.map(file => {
-        const { formats, width, height } = file;
+        const { formats, width, height, caption } = file;
         return {
           formats,
           grid_url: formats.large.url,
           width,
+          caption,
           height
         };
       });
