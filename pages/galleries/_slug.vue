@@ -80,34 +80,7 @@
         />
       </button>
     </div>
-    <client-only>
-      <div v-show="photoColumns.length" class="flex flex-row space-x-3">
-        <transition-group
-          appear
-          name="slide"
-          v-for="(col, i) in photoColumns"
-          :key="i"
-          tag="div"
-          style="flex-basis:0"
-          class="flex flex-col flex-grow space-y-3"
-        >
-          <div v-for="img in col" :key="img.grid_url" class="relative">
-            <img class="w-full min-h-15" :src="img.grid_url" />
-            <div
-              style="background: rgba(0,0,0,0.4)"
-              class="absolute bottom-0 flex justify-between left-0 w-full h-8 text-white px-2"
-            >
-              <span class="text-xs py-2">
-                {{ img.caption }}
-              </span>
-              <button class="focus:outline-none">
-                <img src="/icons/plus-on-picures.svg" alt="Plus" />
-              </button>
-            </div>
-          </div>
-        </transition-group>
-      </div>
-    </client-only>
+    <gallery-pan :folders="gallery.folders" :files="gallery.files" />
   </div>
 </template>
 
@@ -126,6 +99,8 @@ export default {
         }
       })
       .catch(console.log);
+    const gallery = resp.data.galleries[0];
+
     return {
       gallery: resp.data.galleries[0]
     };
@@ -150,21 +125,7 @@ export default {
       radio: true
     };
   },
-  computed: {
-    photoColumns() {
-      if (!this.gallery.files.length) return [];
-      return this.getPhotoColumns(this.gallery.files);
-    },
-    folderPhotoColumns() {
-      if (this.gallery.files.length) return [];
-      return this.gallery.folders.map(folder => {
-        return {
-          name: folder.name,
-          columns: this.getPhotoColumns(folder.files)
-        };
-      });
-    }
-  },
+
   mounted() {
     setTimeout(() => {
       this.loaded = true;
@@ -181,51 +142,6 @@ export default {
     },
     hideFolderDropdown() {
       this.folderDropdown = false;
-    },
-    getPhotoColumns(files) {
-      const mobile = process.client && document?.documentElement.clientWidth;
-      let photos = [];
-      if (mobile <= 800) {
-        photos = files.map(file => {
-          const { formats, width, height, caption } = file;
-          return {
-            formats,
-            grid_url: formats.small.url,
-            width,
-            height,
-            caption
-          };
-        });
-        return [photos];
-      }
-      photos = files.map(file => {
-        const { formats, width, height, caption } = file;
-        return {
-          formats,
-          grid_url: formats.large.url,
-          width,
-          caption,
-          height
-        };
-      });
-      const { columns } = photos.reduce(
-        (acc, photo) => {
-          if (acc.col1 <= acc.col2) {
-            acc.columns[0].push(photo);
-            acc.col1 += photo.height / photo.width;
-          } else {
-            acc.columns[1].push(photo);
-            acc.col2 += photo.height / photo.width;
-          }
-          return acc;
-        },
-        {
-          col1: 0,
-          col2: 0,
-          columns: [[], []]
-        }
-      );
-      return columns;
     }
   }
 };
@@ -238,7 +154,7 @@ export default {
   @apply cursor-pointer mr-3
 
 .search-box
-  @apply mr-0 ml-auto outline-none
+  @apply mr-0 ml-auto outline-none w-32 sm:w-52
   transition: border .3s ease-in-out
   border-bottom: 1px solid rgba(#000, 0)
   &:focus
