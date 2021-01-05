@@ -1,8 +1,6 @@
 export default {
-  // Target (https://go.nuxtjs.dev/config-target)
   target: "static",
 
-  // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: "luis-munoz-photography",
     meta: [
@@ -13,24 +11,25 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
 
-  // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [],
-
-  // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [{ src: "~/plugins/v-click-outside", ssr: false }],
-
-  // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
+  buildModules: ["@nuxtjs/tailwindcss"],
 
-  // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
-  buildModules: [
-    // https://go.nuxtjs.dev/tailwindcss
-    "@nuxtjs/tailwindcss"
-  ],
+  modules: ["@nuxtjs/apollo", "nuxt-webfontloader", "nuxt-i18n"],
 
-  // Modules (https://go.nuxtjs.dev/config-modules)
-  modules: ["@nuxtjs/apollo", "nuxt-webfontloader"],
-
+  i18n: {
+    defaultLocale: "es",
+    vueI18n: {
+      locale: "es",
+      fallbackLocale: "es",
+      messages: { es: {}, en: {} }
+    },
+    locales: [
+      { code: "en", name: "English" },
+      { code: "es", name: "Español" }
+    ]
+  },
   apollo: {
     clientConfigs: {
       default: {
@@ -44,6 +43,5 @@ export default {
       families: ["Inter:wght@400;700&display=swap"]
     }
   },
-  // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {}
 };

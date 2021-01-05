@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <nav class="navbar bg-white z-50">
+    <nav class="navbar">
       <logo />
       <div>
         <nuxt-link
@@ -11,7 +11,9 @@
         >
           {{ name }}
         </nuxt-link>
-        <a>EN</a>
+        <a class="uppercase cursor-pointer w-10" @click="switchLang">
+          {{ $i18n.locale }}
+        </a>
       </div>
     </nav>
     <Nuxt />
@@ -32,6 +34,12 @@ export default {
     scrollTop() {
       return document?.documentElement.scrollTop;
     }
+  },
+  methods: {
+    switchLang() {
+      const locale = this.$i18n.locale;
+      this.$i18n.locale = locale === "es" ? "en" : "es";
+    }
   }
 };
 </script>
@@ -43,9 +51,9 @@ html, *
   font-family:"Inter",sans-serif
 
 .wrapper
-  @apply p-0 m-0
+  @apply p-0 m-0 transition dark:bg-black dark:text-white
   .navbar
-    @apply py-5 fixed w-full lg:px-12 flex
+    @apply py-5 fixed w-full lg:px-12 flex transition bg-white dark:bg-black z-50
     div
       @apply hidden sm:block
       a

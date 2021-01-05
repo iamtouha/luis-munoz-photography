@@ -6,7 +6,7 @@ module.exports = {
     "./plugins/**/*.{js,ts}",
     "./nuxt.config.{js,ts}"
   ],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: "class",
   theme: {
     extend: {}
   },
@@ -15,5 +15,5 @@ module.exports = {
       padding: ["first", "last"]
     }
   },
-  plugins: []
+  plugins: [require("@tailwindcss/forms")]
 };

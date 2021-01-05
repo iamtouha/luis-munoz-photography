@@ -17,6 +17,7 @@ query($slug: String!) {
     folders {
       name
       files {
+        url
         formats
         width
         height

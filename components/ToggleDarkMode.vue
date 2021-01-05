@@ -6,12 +6,11 @@
       <input id="toogleA" v-model="toggle" type="checkbox" class="hidden" />
       <!-- line -->
       <div
-        :class="[toggle ? 'bg-gray-400' : 'bg-gray-200']"
-        class="toggle__line w-9 h-5 bg-gray-200 rounded-full shadow-inner"
+        class="transition toggle__line w-9 h-5 bg-gray-900 dark:bg-white rounded-full shadow-inner"
       ></div>
       <!-- dot -->
       <div
-        class="toggle__dot absolute w-3.5 h-3.5 bg-white rounded-full shadow inset-y-0 left-0"
+        class="transition toggle__dot absolute w-3.5 h-3.5 dark:bg-gray-900 bg-white transit rounded-full shadow inset-y-0 left-0"
       ></div>
     </div>
   </label>
@@ -30,23 +29,23 @@ export default {
   },
   watch: {
     toggle(val) {
-      this.$emit("input", val);
+      const el = document.getElementsByTagName("html");
+      if (val) {
+        el[0]?.classList.add("dark");
+        this.$store.commit("DARK_MODE_TOGGLE");
+      } else {
+        el[0]?.classList.remove("dark");
+        this.$store.commit("LIGHT_MODE_TOGGLE");
+      }
     }
-  },
-  created() {
-    this.toggle = this.value;
   }
 };
 </script>
 
 <style scoped>
-.toggle__line {
-  transition: background 0.3s ease-in-out;
-}
 .toggle__dot {
   top: 0.2rem;
   left: 0.25rem;
-  transition: all 0.3s ease-in-out;
 }
 
 input:checked ~ .toggle__dot {

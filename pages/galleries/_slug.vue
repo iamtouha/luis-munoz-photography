@@ -1,19 +1,23 @@
 <template>
   <div class="page-wrapper">
     <div class="flex">
-      <h4 class="gallery-title">{{ gallery.title_en }}</h4>
+      <h4 class="gallery-title">
+        {{ $i18n.locale === "es" ? gallery.title_esp : gallery.title_en }}
+      </h4>
       <input type="text" ref="searchBox" class="search-box" v-model="search" />
       <img
         class="search-icon"
-        src="/icons/loupe-search.svg"
+        :src="darkMode ? '/icons/search-dark.svg' : '/icons/search.svg'"
         alt="search"
         @click="focusOnSearch"
       />
-      <toggle-btn v-model="toggle" />
+      <toggle-dark-mode />
     </div>
     <hr class="mb-3 mt-1" />
     <p class="text-sm">
-      {{ gallery.description_en }}
+      {{
+        $i18n.locale === "es" ? gallery.description_esp : gallery.description_en
+      }}
     </p>
     <div class="flex py-2 mt-2 relative">
       <button
@@ -37,12 +41,10 @@
         <ul
           v-show="folderDropdown"
           v-click-outside="folderDdownConfig"
-          class="folder-dropdown z-10 bg-white"
+          class="folder-dropdown z-10 bg-white dark:bg-black"
         >
           <li>
-            <button class="focus:outline-none mr-2">
-              <img class="w-3.5 h-3.5" src="/icons/check-all-blank.svg" />
-            </button>
+            <input type="checkbox" />
             folder-1
             <span class="flex-grow mt-3 mb-1.5 mx-1"></span>
             <span class="text-sm">
@@ -65,7 +67,7 @@
         10
       </button>
       <button class="focus:outline-none mx-1 px-2">
-        <img src="/icons/share.svg" />
+        <img :src="darkMode ? '/icons/share-dark.svg' : '/icons/share.svg'" />
       </button>
       <button
         :disabled="!gallery.allowDownload"
@@ -80,7 +82,13 @@
         />
       </button>
     </div>
-    <gallery-pan :folders="gallery.folders" :files="gallery.files" />
+    <gallery-pan :files="gallery.files" />
+    <gallery-pan
+      v-for="{ name, files } in gallery.folders"
+      :key="name"
+      :files="files"
+      :name="name"
+    />
   </div>
 </template>
 
@@ -118,14 +126,17 @@ export default {
         events: ["click"],
         isActive: true
       },
-      toggle: false,
       folderDropdown: false,
       loaded: false,
       search: "",
       radio: true
     };
   },
-
+  computed: {
+    darkMode() {
+      return this.$store.getters.darkMode;
+    }
+  },
   mounted() {
     setTimeout(() => {
       this.loaded = true;
@@ -154,7 +165,7 @@ export default {
   @apply cursor-pointer mr-3
 
 .search-box
-  @apply mr-0 ml-auto outline-none w-32 sm:w-52
+  @apply mr-0 ml-auto outline-none dark:bg-black w-32 sm:w-52
   transition: border .3s ease-in-out
   border-bottom: 1px solid rgba(#000, 0)
   &:focus

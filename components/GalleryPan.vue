@@ -1,64 +1,23 @@
 <template>
   <div class="relative">
-    <div class="grid sm:grid-cols-2 grid-cols-1 gap-5 mt-3 mb-10">
+    <p v-show="name">{{ name }}</p>
+    <div
+      v-show="files.length"
+      class="grid sm:grid-cols-2 grid-cols-1 gap-5 mt-3 mb-10"
+    >
       <transition-group
         name="slide"
         tag="div"
         class="grid gap-5 auto-rows-min grid-cols-1"
       >
-        <div
-          v-for="img in columns[0]"
-          :key="img.url"
-          class="relative image-wrapper"
-        >
-          <img
-            style="width:100%"
-            :srcset="img.srcset"
-            sizes="(min-width:650px) 100vw, 50vw"
-            :src="img.formats.small.url"
-          />
-          <div
-            style="background: rgba(0,0,0,0.4)"
-            class="absolute bottom-0 flex justify-between left-0 w-full h-8 text-white px-2"
-          >
-            <span class="text-xs py-2">
-              {{ img.caption }}
-            </span>
-            <button class="focus:outline-none">
-              <img src="/icons/plus-on-picures.svg" alt="Plus" />
-            </button>
-          </div>
-        </div>
+        <image-container v-for="img in columns[0]" :key="img.url" :img="img" />
       </transition-group>
       <transition-group
         name="slide"
         tag="div"
         class="grid gap-5 auto-rows-min grid-cols-1"
       >
-        <div
-          v-for="img in columns[1]"
-          :key="img.url"
-          class="relative image-wrapper"
-        >
-          <img
-            style="width:100%"
-            :srcset="img.srcset"
-            sizes="(min-width:650px) 100vw, 50vw"
-            :src="img.formats.small.url"
-            alt=""
-          />
-          <div
-            style="background: rgba(0,0,0,0.4)"
-            class="absolute bottom-0 flex justify-between left-0 w-full h-8 text-white px-2"
-          >
-            <span class="text-xs py-2">
-              {{ img.caption }}
-            </span>
-            <button class="focus:outline-none">
-              <img src="/icons/plus-on-picures.svg" alt="Plus" />
-            </button>
-          </div>
-        </div>
+        <image-container v-for="img in columns[1]" :key="img.url" :img="img" />
       </transition-group>
     </div>
   </div>
@@ -68,7 +27,11 @@
 export default {
   name: "GalleryPan",
   props: {
-    files: Array
+    files: {
+      type: Array,
+      default: []
+    },
+    name: String
   },
   data() {
     return {
@@ -113,8 +76,8 @@ export default {
 
 <style lang="sass">
 .image-wrapper
-    background-color: #eee
-    min-height:300px
+  background-repeat: no-repeat
+  background-size:  cover
 
 .slide-leave-active,
 .slide-enter-active
